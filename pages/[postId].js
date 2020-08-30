@@ -2,7 +2,7 @@
 import styles from '../styles/Home.module.css'
 import ReactMarkdown from "react-markdown";
 
-const Home = ({posts}) => {
+const BlogPost = ({post}) => {
   return (
     <div className={styles.container}>
       <Head>
@@ -15,13 +15,11 @@ const Home = ({posts}) => {
           <a href="../">Şafak TÜRKELİ</a>
         </h1>
 
-        {posts.map(post => (
-          <div>
-            <h2 className={styles.post_title}><a href={post.slug}>{post.title}</a></h2>
-            <div><ReactMarkdown source={post.text}/></div>
-            <div className={styles.post_date}>{post.date}</div>
-          </div>
-        ))}
+        <div>
+          <h2 className={styles.post_title}><a href={post.slug}>{post.title}</a></h2>
+          <div><ReactMarkdown source={post.text}/></div>
+          <div className={styles.post_date}>{post.date}</div>
+        </div>
       </main>
 
       <footer className={styles.footer}>
@@ -31,10 +29,10 @@ const Home = ({posts}) => {
   )
 }
 
-Home.getInitialProps = async ( req ) => {
-  const res = await fetch('http://localhost:3000/api/posts');
+BlogPost.getInitialProps = async ({ req, query }) => {
+  const res = await fetch(`http://localhost:3000/api/post/${query.postId}`);
   const json = await res.json();
-  return { posts: json.posts };
-}
+  return { post: json.post };
+};
 
-export default Home;
+export default BlogPost;
